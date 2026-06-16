@@ -1,6 +1,6 @@
 from torchvision import datasets, transforms
 import torch
-from torch.utils.data import TensorDataset
+from torch.utils.data import TensorDataset, random_split
 from datamodule import DataModule
 from model import Model
 from optimizer import Optimizer
@@ -25,10 +25,11 @@ Y_train = one_hot(Y_train)
 X_test = X_test.reshape(X_test.shape[0], -1)
 Y_test = one_hot(Y_test)
 
-train_dataset = TensorDataset(X_train, Y_train)
+full_train = TensorDataset(X_train, Y_train)
+train_dataset, val_dataset = random_split(full_train, [55000, 5000])
 test_dataset = TensorDataset(X_test, Y_test)
 
-data_module = DataModule(train_data=train_dataset, test_data=test_dataset, batch_size=32)
+data_module = DataModule(train_data=train_dataset, val_data=val_dataset, test_data=test_dataset, batch_size=32)
 model = Model(input_size=X_train.shape[1], hidden_size=256, output_size=Y_train.shape[1])
 optimizer = Optimizer()
 trainer = Trainer(model, data_module, optimizer)
