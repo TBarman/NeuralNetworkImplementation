@@ -30,7 +30,7 @@ train_dataset, val_dataset = random_split(full_train, [55000, 5000])
 test_dataset = TensorDataset(X_test, Y_test)
 
 data_module = DataModule(train_data=train_dataset, val_data=val_dataset, test_data=test_dataset, batch_size=32)
-model = Model(input_size=X_train.shape[1], hidden_size=256, output_size=Y_train.shape[1])
+model = Model(input_size=X_train.shape[1], hidden_size=256, output_size=Y_train.shape[1], decay_weight=0)
 optimizer = Optimizer()
 trainer = Trainer(model, data_module, optimizer)
 trainer.fit()
