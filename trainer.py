@@ -6,10 +6,24 @@ class Trainer:
         self.optimizer = optimizer
         self.epochs = epochs
 
+    def test(self):
+        test_dataloader = self.data_module.test_dataloader()
+        correct = 0
+        total = 0
+        for X, Y in test_dataloader:
+            predictions = self.model.predict(X)
+            labels = torch.argmax(Y, dim=1)
+            correct += (predictions == labels).sum().item()
+            total += Y.shape[0]
+        accuracy = correct/total
+        return accuracy
+
     def fit(self):
         for i in range(self.epochs):
             avg_train_loss, avg_val_loss, avg_train_accuracy, avg_val_accuracy = self.fit_epoch()
-            print(f"Epoch {i+1}: training loss = {avg_train_loss:.4f}, validation loss = {avg_val_loss:.4f}, training accuracy = {avg_train_accuracy:.4f}, validation accuracy = {avg_val_accuracy:.4f}")
+            print(f"Epoch {i+1}: Training Loss: {avg_train_loss:.4f}, Validation Loss: {avg_val_loss:.4f}, Training Accuracy: {avg_train_accuracy:.4f}, Validation Accuracy: {avg_val_accuracy:.4f}")
+        test_accuracy = self.test()
+        print(f"Test Accuracy: {test_accuracy:.4f}")
 
     def fit_epoch(self):
         train_dataloader = self.data_module.train_dataloader()

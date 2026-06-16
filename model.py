@@ -82,3 +82,7 @@ class Model:
             "b2": self.b2
         }
 
+    def predict(self, X):
+        Z2 = self.forward(X)
+        return torch.argmax(Z2, dim=1)
+
