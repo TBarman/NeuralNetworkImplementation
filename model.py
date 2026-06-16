@@ -1,14 +1,13 @@
 import torch
 class Model:
     '''
-    Class representing an MLP with one hidden layer
+    Class representing an MLP with one hidden layer. In general, it is assumed that labels Y are one-hot encoded.
     '''
-    def __init__(self, input_size, hidden_size, output_size, decay_weight=0, learning_rate = 0.003):
-        self.learning_rate = learning_rate
+    def __init__(self, input_size, hidden_size, output_size, decay_weight=0):
         self.decay_weight = decay_weight
-        self.W1 = torch.randn((input_size, hidden_size)) * 2/(input_size) # He initialization
+        self.W1 = torch.randn((input_size, hidden_size)) * (2/(input_size))**0.5 # He initialization
         self.b1 = torch.zeros((1, hidden_size))
-        self.W2 = torch.randn((hidden_size, output_size)) * 2/(hidden_size)
+        self.W2 = torch.randn((hidden_size, output_size)) * (2/(hidden_size))**0.5
         self.b2 = torch.zeros((1, output_size))
 
         self.cache = {}
@@ -82,3 +81,4 @@ class Model:
             "W2": self.W2,
             "b2": self.b2
         }
+
